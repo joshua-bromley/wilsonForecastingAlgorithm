@@ -14,33 +14,21 @@
 class Course {
 public:
     Course(string, vector<Teacher>, vector<Student>);
+    Course(string);
 
     const string &getId() const;
-
     void setId(const string &id);
-
     int getNumSections() const;
-
     void setNumSections(int numSections);
-
     int getNumTeachers() const;
-
     void setNumTeachers(int numTeachers);
-
     int getNumStudents() const;
-
     void setNumStudents(int numStudents);
-
     const vector<Section> &getSections() const;
-
     void setSections(const vector<Section> &sections);
-
     const vector<Teacher> &getTeachers() const;
-
     void setTeachers(const vector<Teacher> &teachers);
-
     const vector<Student> &getStudents() const;
-
     void setStudents(const vector<Student> &students);
 
 private:
@@ -61,6 +49,10 @@ Course::Course(string id, vector<Teacher> teachers, vector<Student> studnets){
         Course::students.push_back(student);
     }
     numStudents = Course::students.size();
+}
+
+Course::Course(string id){
+    Course::id = id;
 }
 
 const string &Course::getId() const {
