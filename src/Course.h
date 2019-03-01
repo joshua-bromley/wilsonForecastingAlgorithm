@@ -13,7 +13,7 @@
 
 class Course {
 public:
-    Course(string, vector<Teacher>, vector<Student>);
+    Course(string);
 
     const string &getId() const;
 
@@ -51,16 +51,9 @@ private:
     vector<Student> students;
 };
 
-Course::Course(string id, vector<Teacher> teachers, vector<Student> studnets){
+Course::Course(string id){
     Course::id = id;
-    for(Teacher teacher: teachers){
-        Course::teachers.push_back(teacher);
-    }
-    numTeachers = Course::teachers.size();
-    for(Student student : studnets){
-        Course::students.push_back(student);
-    }
-    numStudents = Course::students.size();
+
 }
 
 const string &Course::getId() const {
