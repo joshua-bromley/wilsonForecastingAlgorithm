@@ -13,6 +13,7 @@ using namespace std;
 class Teacher {
 public:
     Teacher(string, vector<string>);
+    Teacher();
 
     const string &getId() const;
     void setId(const string &id);
@@ -32,6 +33,10 @@ Teacher::Teacher(string id, vector<string> qualifications){
     for(string qualification : qualifications){
         Teacher::qualifications.push_back(qualification);
     }
+}
+
+Teacher::Teacher(){
+
 }
 
 const string &Teacher::getId() const {

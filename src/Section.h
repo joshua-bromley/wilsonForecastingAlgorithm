@@ -14,7 +14,7 @@ using namespace std;
 
 class Section {
 public:
-    Section(string, string);
+    Section(string, string, Teacher);
 
     const string &getId() const;
 
@@ -44,9 +44,10 @@ private:
     vector<Student> students;
 };
 
-Section::Section(string id, string course){
+Section::Section(string id, string course, Teacher teacher){
     Section::id = id;
     Section::course = course;
+    Section::teacher = teacher;
 }
 
 const string &Section::getId() const {
