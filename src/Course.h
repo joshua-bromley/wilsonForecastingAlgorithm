@@ -7,14 +7,15 @@
 
 #include <vector>
 #include <String>
+#include <iostream>
 #include "Section.h"
 #include "Student.h"
 #include "Teacher.h"
 
 class Course {
 public:
-    Course(string, vector<Teacher>, vector<Student>);
-    Course(string);
+    Course(string, vector<int>, vector<int>, Student*, Teacher*);
+    Course(string, Student*, Teacher*);
 
     const string &getId() const;
     void setId(const string &id);
@@ -26,33 +27,43 @@ public:
     void setNumStudents(int numStudents);
     const vector<Section> &getSections() const;
     void setSections(const vector<Section> &sections);
-    const vector<Teacher> &getTeachers() const;
-    void setTeachers(const vector<Teacher> &teachers);
-    const vector<Student> &getStudents() const;
-    void setStudents(const vector<Student> &students);
+    vector<int> getTeachers();
+    vector<int> getStudents();
+    void addStudent(int);
+    void addTeacher(int);
+
 
 private:
     string id;
     int numSections, numTeachers, numStudents;
     vector<Section> sections;
-    vector<Teacher> teachers;
-    vector<Student> students;
+    Teacher* headTeacher;
+    Student* headStudent;
+    vector<int> teachers;
+    vector<int> students;
 };
 
-Course::Course(string id, vector<Teacher> teachers, vector<Student> studnets){
+Course::Course(string id, vector<int> teachers, vector<int> students, Student* headStudent, Teacher* headTeacher){
     Course::id = id;
-    for(Teacher teacher: teachers){
+    for(int teacher: teachers){
         Course::teachers.push_back(teacher);
     }
     numTeachers = Course::teachers.size();
-    for(Student student : studnets){
+    for(int student : students){
         Course::students.push_back(student);
     }
     numStudents = Course::students.size();
+    Course::headStudent = headStudent;
+    Course::headTeacher = headTeacher;
 }
 
-Course::Course(string id){
+Course::Course(string id, Student* headStudent, Teacher* headTeacher){
     Course::id = id;
+    Course::headStudent = headStudent;
+    Course::headTeacher = headTeacher;
+    numStudents = 0;
+    numTeachers = 0;
+    numSections = 0;
 }
 
 const string &Course::getId() const {
@@ -95,21 +106,23 @@ void Course::setSections(const vector<Section> &sections) {
     Course::sections = sections;
 }
 
-const vector<Teacher> &Course::getTeachers() const {
-    return teachers;
+
+
+void Course::addStudent(int student) {
+    students.push_back(student);
+    numStudents++;
 }
 
-void Course::setTeachers(const vector<Teacher> &teachers) {
-    Course::teachers = teachers;
+void Course::addTeacher(int teacher) {
+    teachers.push_back(teacher);
+    numTeachers++;
 }
 
-const vector<Student> &Course::getStudents() const {
-    return students;
-}
+vector<int> Course::getTeachers() { return teachers;}
 
-void Course::setStudents(const vector<Student> &students) {
-    Course::students = students;
-}
+
+vector<int> Course::getStudents() {return students;}
+
 
 
 #endif //FORECASTINGALGORITHM_COURSE_H

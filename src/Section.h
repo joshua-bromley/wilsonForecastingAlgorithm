@@ -14,9 +14,10 @@ using namespace std;
 
 class Section {
 public:
-    Section(string, string, Teacher);
+    Section(string, string, Teacher*, Student*, int);
+    Section(string, string, Student* ,vector<int>);
 
-    const string &getId() const;
+    string getId();
 
     void setId(const string &id);
 
@@ -28,29 +29,39 @@ public:
 
     void setPeriod(int period);
 
-    const Teacher &getTeacher() const;
+    vector<int> getStudent();
 
-    void setTeacher(const Teacher &teacher);
+    void addStudent(int);
 
-    const vector<Student> &getStudents() const;
 
-    void setStudents(const vector<Student> &students);
 
 private:
     string id;
     string course;
     int period;
-    Teacher teacher;
-    vector<Student> students;
+    Teacher* teacher;
+    Student* headStudent;
+    vector<int> students;
 };
 
-Section::Section(string id, string course, Teacher teacher){
+Section::Section(string id, string course, Teacher* teacher, Student* headStudent, int period){
     Section::id = id;
     Section::course = course;
     Section::teacher = teacher;
+    Section::period = period;
+    Section::headStudent = headStudent;
 }
 
-const string &Section::getId() const {
+Section::Section(string id, string course, Student* headStudent,vector<int> students){
+    Section::id = id;
+    Section::course = course;
+    Section::headStudent = headStudent;
+    for(int student : students){
+        Section::students.push_back(student);
+    }
+}
+
+string Section::getId() {
     return id;
 }
 
@@ -74,21 +85,14 @@ void Section::setPeriod(int period) {
     Section::period = period;
 }
 
-const Teacher &Section::getTeacher() const {
-    return teacher;
+vector<int> Section::getStudent(){ return students;}
+
+
+void Section::addStudent(int student){
+    students.push_back(student);
 }
 
-void Section::setTeacher(const Teacher &teacher) {
-    Section::teacher = teacher;
-}
 
-const vector<Student> &Section::getStudents() const {
-    return students;
-}
-
-void Section::setStudents(const vector<Student> &students) {
-    Section::students = students;
-}
 
 
 #endif //FORECASTINGALGORITHM_SECTION_H

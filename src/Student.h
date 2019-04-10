@@ -12,13 +12,13 @@ using namespace std;
 
 class Student {
 public:
-    Student(string, vector<string>);
+    Student(string, vector<string>, int);
 
     const string &getId() const;
     void setId(const string &id);
     const vector<string> &getRequests() const;
     void setRequests(const vector<string> &requests);
-    const vector<string> &getSchedule() const;
+    vector<string> getSchedule();
     void setSchedule(const vector<string> &schedule);
 
 private:
@@ -27,10 +27,13 @@ private:
     vector<string> schedule;
 };
 
-Student::Student(string id, vector<string> requests){
+Student::Student(string id, vector<string> requests, int periods){
     Student::id = id;
     for(string request : requests){
         Student::requests.push_back(request);
+    }
+    for(int i = 0; i < periods; i++){
+        schedule.push_back(" ");
     }
 }
 
@@ -50,7 +53,7 @@ void Student::setRequests(const vector<string> &requests) {
     Student::requests = requests;
 }
 
-const vector<string> &Student::getSchedule() const {
+vector<string> Student::getSchedule()  {
     return schedule;
 }
 
