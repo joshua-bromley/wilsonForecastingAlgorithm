@@ -29,9 +29,10 @@ public:
 
     void setPeriod(int period);
 
-    vector<int> getStudent();
+    vector<int> &getStudent();
 
     void addStudent(int);
+
 
 
 
@@ -85,12 +86,13 @@ void Section::setPeriod(int period) {
     Section::period = period;
 }
 
-vector<int> Section::getStudent(){ return students;}
+vector<int> &Section::getStudent(){ return students;}
 
 
 void Section::addStudent(int student){
     students.push_back(student);
 }
+
 
 
 

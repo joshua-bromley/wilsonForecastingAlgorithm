@@ -19,7 +19,7 @@ public:
     void setId(const string &id);
     const vector<string> &getQualifications() const;
     void setQualifications(const vector<string> &qualifications);
-    vector<string> getSchedule();
+    vector<string> &getSchedule();
     void setSchedule(const vector<string> &schedule);
 private:
     string id;
@@ -58,7 +58,7 @@ void Teacher::setQualifications(const vector<string> &qualifications) {
     Teacher::qualifications = qualifications;
 }
 
-vector<string> Teacher::getSchedule()  {
+vector<string> &Teacher::getSchedule()  {
     return schedule;
 }
 

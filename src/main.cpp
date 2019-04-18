@@ -41,7 +41,7 @@ private:
     void initialSplit();
     void assignTeachers();
     void assignSections();
-    void writeSchedule(string);
+    void writeSchedule(string, string);
     string itos(int);
 
 
@@ -66,14 +66,13 @@ void Application::run(){
     assignTeachers();
     function.quicksort(&courses[0],0,courses.size()-1);
     assignSections();
-    writeSchedule("schedule.txt");
+    writeSchedule("Data/schedule.txt", "Data/studentSchedule.txt");
 
 
 }
 
 void Application::assignSections() {
     for(int i = 0; i < courses.size(); i++){
-        cout << i << endl;
         int numSections = courses[i].getNumStudents()/classSize + 1;
         vector<int> availablePeriods;
         for(int j = 0; j < courses[i].getNumTeachers(); j++){
@@ -100,33 +99,41 @@ void Application::assignSections() {
         }
         function.quicksort(&studentAvail[0],0,studentAvail.size()-1);
         for(int j = 0; j < numSections; j++){
-            for(int k = 0; k < courses[i].getNumTeachers(); k++){
-                for(int l = 0; l < studentAvail.size(); l++){
+            bool found = false;
+            for(int k = 0; k < courses[i].getNumTeachers() && !found; k++){
+                for(int l = 0; l < studentAvail.size() && !found; l++){
                     if((&teachers[0]+courses[i].getTeachers()[k])->getSchedule()[get<0>(studentAvail[l])] == " ") {
                         sections.push_back(Section(courses[i].getId() + (char) ('0' + j), courses[i].getId(), &teachers[0] + courses[i].getTeachers()[k], &students[0], get<0>(studentAvail[l])));
                         (&teachers[0] + courses[i].getTeachers()[k])->getSchedule()[get<0>(studentAvail[l])] = (string) (courses[i].getId() + (char) ('0' + j));
+                        found = true;
                     }
                 }
             }
         }
         cout << "Teacher Assign" << endl;
-        for(int j = 0; j < students.size(); j++){
+        for(int j = 0; j < courses[i].getStudents().size(); j++){
             vector<int> avail;
             for(int  k = 0; k < studentAvail.size(); k++){
-                if(students[j].getSchedule()[get<0>(studentAvail[k])] == " "){
-                    avail.push_back(j);
+                if((&students[0]+courses[i].getStudents()[j])->getSchedule()[get<0>(studentAvail[k])] == " "){
+                    avail.push_back(k);
                 }
             }
             if(avail.size() > 0){
-                tuple<int,int> smallest = (studentAvail[avail[0]]);
+                int smallest = -1;
                 for(int l = 0; l < avail.size(); l++){
-                    smallest = get<1>(studentAvail[avail[l]]) < get<1>(smallest)? studentAvail[avail[l]] : smallest;
-                }
-                for(int l = 0; l < sections.size(); l++){
-                    if(sections[l].getCourse() == courses[i].getId() && sections[l].getPeriod() == get<0>(smallest)){
-                        sections[l].addStudent(j);
-                        students[j].getSchedule()[get<0>(smallest)] = sections[l].getId();
+                    for(int m = 0; m < sections.size(); m++){
+                        if(sections[m].getCourse() == courses[i].getId() && sections[m].getPeriod() == avail[l]){
+                            if(smallest == -1){
+                                smallest = m;
+                            }else if(sections[m].getStudent().size() < sections[smallest].getStudent().size()){
+                                smallest = m;
+                            }
+                        }
                     }
+                }
+                if(smallest != -1){
+                    sections[smallest].addStudent(courses[i].getStudents()[j]);
+                    (&students[0]+courses[i].getStudents()[j])->getSchedule()[sections[smallest].getPeriod()] = sections[smallest].getId();
                 }
             }
         }
@@ -231,17 +238,25 @@ void Application::assignStudents()
 
 }
 
-void Application::writeSchedule(string filename){
+void Application::writeSchedule(string filenameA, string filenameB){
     ofstream myFile;
-    myFile.open(filename);
-    cout << "Write" << endl;
+    myFile.open(filenameA);
     for(int i = 0; i < sections.size(); i++){
-        myFile << sections[i].getCourse() << ", " << sections[i].getId() << ", ";
+        myFile << sections[i].getCourse() << ", " << sections[i].getId() << ", " << sections[i].getPeriod() << ", "  << sections[i].getStudent().size() << endl;
         for(int j = 0; j < sections[i].getStudent().size(); j++){
             myFile << (&students[0]+sections[i].getStudent()[j])->getId() << ", ";
         }
         myFile << endl;
 
+    }
+    myFile.close();
+    myFile.open(filenameB);
+    for(int i = 0; i < students.size(); i++){
+        myFile << students[i].getId() << ", ";
+        for(int j = 0; j < students[i].getSchedule().size(); j++){
+            myFile << students[i].getSchedule()[j] << ", ";
+        }
+        myFile << endl;
     }
     myFile.close();
 }

@@ -18,7 +18,7 @@ public:
     void setId(const string &id);
     const vector<string> &getRequests() const;
     void setRequests(const vector<string> &requests);
-    vector<string> getSchedule();
+    vector<string> &getSchedule();
     void setSchedule(const vector<string> &schedule);
 
 private:
@@ -53,7 +53,7 @@ void Student::setRequests(const vector<string> &requests) {
     Student::requests = requests;
 }
 
-vector<string> Student::getSchedule()  {
+vector<string> &Student::getSchedule()  {
     return schedule;
 }
 
